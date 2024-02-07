@@ -1,0 +1,66 @@
+---
+title: "movies_review"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+if (!requireNamespace("rvest", quietly = TRUE)) install.packages("rvest")
+if (!requireNamespace("polite", quietly = TRUE)) install.packages("polite")
+if (!requireNamespace("httr", quietly = TRUE)) install.packages("httr")
+
+# Load libraries
+library(rvest)
+library(polite)
+library(httr)
+
+
+polite::use_manners(save_as = 'polite_scrape.R')
+
+
+url_template <- 'https://www.imdb.com/title/tt1431045/reviews?ref_=tt_urv'
+
+
+Usernames <- character(0)
+ReviewerDates <- character(0)
+ReviewerContents <- character(0)
+Ratings <- character(0)
+
+
+for (page in 1:12) {  # Assuming there are 12 pages, adjust as needed
+  tryCatch({
+  
+    session <- bow(sprintf(url_template, page), user_agent = "Educational")
+   
+    
+    Usernames <- c(Usernames, scrape(session) %>% html_nodes('span.display-name-link') %>% html_text())
+    ReviewerDates <- c(ReviewerDates, scrape(session) %>% html_nodes('span.review-date') %>% html_text())
+    ReviewerContents <- c(ReviewerContents, scrape(session) %>% html_nodes('div.text.show-more__control') %>% html_text())
+    Ratings <- c(Ratings, scrape(session) %>% html_nodes('span.rating-other-user-rating') %>% html_text())
+  }, error = function(e) {
+    cat("Error occurred on page", page, ":", conditionMessage(e), "\n")
+  })
+}
+
+min_length <- min(length(Usernames), length(ReviewerDates), length(ReviewerContents), length(Ratings))
+
+
+DataFrame <- data.frame(
+  Usernames = Usernames[1:min_length],
+  Reviewer_Date = ReviewerDates[1:min_length],
+  Reviewer_Content = ReviewerContents[1:min_length],
+  Rating = Ratings[1:min_length]
+)
+
+# Save as CSV
+write.csv(DataFrame, file = "imdb_reviews.csv", row.names = FALSE)
+
+# Print the data frame
+print(DataFrame)
+
+```
+
