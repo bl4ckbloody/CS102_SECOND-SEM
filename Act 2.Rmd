@@ -22,45 +22,68 @@ library(httr)
 polite::use_manners(save_as = 'polite_scrape.R')
 
 
-url_template <- 'https://www.imdb.com/title/tt1431045/reviews?ref_=tt_urv'
+url_template <- 'https://www.imdb.com/title/tt6166392/reviews/?ref_=tt_ql_2'
 
-
+# Initialize vectors with sufficient length
 Usernames <- character(0)
 ReviewerDates <- character(0)
 ReviewerContents <- character(0)
 Ratings <- character(0)
 
+# Scrape data from a single page (assuming 300 reviews are on the first page)
+page <- 1
 
-for (page in 1:12) {  # Assuming there are 12 pages, adjust as needed
-  tryCatch({
-  
-    session <- bow(sprintf(url_template, page), user_agent = "Educational")
-   
-    
-    Usernames <- c(Usernames, scrape(session) %>% html_nodes('span.display-name-link') %>% html_text())
-    ReviewerDates <- c(ReviewerDates, scrape(session) %>% html_nodes('span.review-date') %>% html_text())
-    ReviewerContents <- c(ReviewerContents, scrape(session) %>% html_nodes('div.text.show-more__control') %>% html_text())
-    Ratings <- c(Ratings, scrape(session) %>% html_nodes('span.rating-other-user-rating') %>% html_text())
-  }, error = function(e) {
-    cat("Error occurred on page", page, ":", conditionMessage(e), "\n")
-  })
-}
+# Create a session for the page
+session <- bow(sprintf(url_template, page), user_agent = "Educational")
 
-min_length <- min(length(Usernames), length(ReviewerDates), length(ReviewerContents), length(Ratings))
+# Scrape data and append to vectors
+Usernames <- c(Usernames, scrape(session) %>% html_nodes('span.display-name-link') %>% html_text())
+ReviewerDates <- c(ReviewerDates, scrape(session) %>% html_nodes('span.review-date') %>% html_text())
+ReviewerContents <- c(ReviewerContents, scrape(session) %>% html_nodes('div.text.show-more__control') %>% html_text())
+Ratings <- c(Ratings, scrape(session) %>% html_nodes('span.rating-other-user-rating') %>% html_text())
 
-
+# Create a data frame
 DataFrame <- data.frame(
-  Usernames = Usernames[1:min_length],
-  Reviewer_Date = ReviewerDates[1:min_length],
-  Reviewer_Content = ReviewerContents[1:min_length],
-  Rating = Ratings[1:min_length]
+  Usernames = Usernames,
+  Reviewer_Date = ReviewerDates,
+  Reviewer_Content = ReviewerContents,
+  Rating = Ratings
 )
 
-# Save as CSV
+url_2 <- 'https://www.imdb.com/title/tt6166392/reviews/ ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnrqrxtm4br73qkt56hna7e7sul5pjt6ubc7o44vvnzdb4d4x4icymwwtiavrrj6njgjuxxcs'
+
+# Initialize vectors with sufficient length
+Usernames <- character(0)
+ReviewerDates <- character(0)
+ReviewerContents <- character(0)
+Ratings <- character(0)
+
+# Scrape data from a single page (assuming 300 reviews are on the first page)
+page <- 2
+
+# Create a session for the page
+session <- bow(sprintf(url_template, page), user_agent = "Educational")
+
+# Scrape data and append to vectors
+Usernames <- c(Usernames, scrape(session) %>% html_nodes('span.display-name-link') %>% html_text())
+ReviewerDates <- c(ReviewerDates, scrape(session) %>% html_nodes('span.review-date') %>% html_text())
+ReviewerContents <- c(ReviewerContents, scrape(session) %>% html_nodes('div.text.show-more__control') %>% html_text())
+Ratings <- c(Ratings, scrape(session) %>% html_nodes('span.rating-other-user-rating') %>% html_text())
+
+# Create a data frame
+DataFrame <- data.frame(
+  Usernames = Usernames,
+  Reviewer_Date = ReviewerDates,
+  Reviewer_Content = ReviewerContents,
+  Rating = Ratings
+)
+
+
 write.csv(DataFrame, file = "imdb_reviews.csv", row.names = FALSE)
 
-# Print the data frame
+
 print(DataFrame)
+
 
 ```
 
