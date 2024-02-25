@@ -1,0 +1,65 @@
+---
+title: "movies_review"
+author: "Paula Mae Salvador"
+---
+
+```{r}
+library(rvest)
+
+
+scrape_page <- function(url) {
+  session <- session(url)
+
+  Usernames <- session %>% html_nodes('span.display-name-link') %>% html_text()
+  ReviewerDates <- session %>% html_nodes('span.review-date') %>% html_text()
+  ReviewerContents <- session %>% html_nodes('div.text.show-more__control') %>% html_text()
+  Ratings <- session %>% html_nodes('span.rating-other-user-rating') %>% html_text()
+
+  max_length <- max(length(Usernames), length(ReviewerDates), length(ReviewerContents), length(Ratings))
+
+  Usernames <- rep_len(Usernames, max_length)
+  ReviewerDates <- rep_len(ReviewerDates, max_length)
+  ReviewerContents <- rep_len(ReviewerContents, max_length)
+  Ratings <- rep_len(Ratings, max_length)
+
+  data.frame(
+    Usernames = Usernames,
+    Reviewer_Date = ReviewerDates,
+    Reviewer_Content = ReviewerContents,
+    Rating = Ratings)
+}
+
+
+scrape_reviews <- function(urls) {
+  all_reviews <- data.frame()
+
+  for (url in urls) {
+    reviews <- scrape_page(url)
+    all_reviews <- rbind(all_reviews, reviews)
+  }
+
+  all_reviews
+}
+
+# this is the url for twelve pages 
+urls <- c(
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnrtqprm2cj334ptb6xeadd74w35pjt6ubc6pe3fvmzdb4d5yitxog6cpty22ex4i4jl3nks6',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzsr7s4sary3qnd36hpapdp4tttfjrkic22oi2f7mryocj3d4ekjilyaeamq3cblvxqj3ha',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbxqptmsbbz2mkd56xpb7cpywt5pjt6ubc6pe4f3pzkb4d3jplaom7jqpnwjtiqjsjj42tyu',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbqqlu4oab53qkdz6pjapdpewt5pjt6ubc5oazfzpzjb4dsqmexksk64bvghmfpja2tcj3py',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjwr3tmmar32ipdr7hiahe72v35pjt6ubc5oa4v7pzmb4d6uedga5ldljcdok2ztddhm6vm4',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjqr7umubzy3umtz7pfb3dpqv3hoq366sssoyyvznrddz4k5h3zjbmcrndrkfclibb4psryvya',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrzrds4sbrz3ikdr7xja7bp6u3eoq366sssoyyv7mrldb4k4dnevhk7yzufffopq67elbzneki',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrurhtm2art3ypt77xeb3epyul5pjt6ubc5oazftmzdb4d4jnfn7oogasetvr5bfmuh2hiqw',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrtrxqmobzz34kdb7xlaxc7yu35pjt6ubc5oa3fxnrdb4d2lvhmjczehvv3qbgqufmw4fjec',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmzyqltmqaj43imdx4hjadap4ul5pjt6ubc5oezf5mrib4d3gl753rrydghjcynydfuxjh6li',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmzwrdrmmazz34kd54pob7bpwvtgoq366sssoyyvznrncv4k5wmfjiaz2mpoaqnjbp4l6opfrvy'
+)
+
+result_reviews <- scrape_reviews(urls)
+
+print(result_reviews)
+
+write.csv(result_reviews, file = "imdb_reviews.csv", row.names = FALSE)
+```
