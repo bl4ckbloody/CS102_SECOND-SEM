@@ -1,6 +1,7 @@
 ---
 title: "movies_review"
 author: "Paula Mae Salvador"
+movie title: "Se7en"
 ---
 
 ```{r}
