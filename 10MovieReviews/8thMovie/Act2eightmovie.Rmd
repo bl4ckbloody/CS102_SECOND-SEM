@@ -43,18 +43,18 @@ scrape_reviews <- function(urls) {
 
 # this is the url for twelve pages 
 urls <- c(
-  'https://www.imdb.com/title/tt0114369/reviews/?ref_=tt_ov_rt',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnrtrpt46cjz34ndb4hnb7d7stttfjrk4ds6pa2vxpryodh6mgx7hriurxxjdoywer4suz3a',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzqqpqmycj53ykdb7xfb3a76vl5pjt6udkyo4yvrmjjb4dv6w3iyzjw2dyctkwt27m6b5e3q',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnburlr4sbb43uod54pfb3apuv35pjt6uds2oq2v7mrmb4drljedv7mi3fteffa3jvycjg6tc',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbsrlr44aj634mtx4hjata76wt5pjt6ucktpayvzpzkb4dq4jz6d54ugtxnp7d3uvw5bk6ny',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbrrht46az73aodz67naxa72v35pjt6ubczoq4vrpzjb4ds6wnj2tkgljsj5x3nohlrrvmoa',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjzr7umybz62mod377oa7c7wvdfoq366sszpeyf7mrjdb4k5feypb3t5izv4uqdfc3533vmizq',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjxr3qmqaj42iotr4hkb3c76ud5pjt6ud2somyfvprpb4dscvpmwmlstagz236ymumooaqwo',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjurlr4warz3mkdb67ib7e7yud5pjt6ucc4peyvvnjkb4d2qwq7s4dwvf7kjmoxsdqsf2b2m',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjvrprmmbb62mmtb4hia7d7yv3coq366ss7ouyflmzpdf4k4vf7b34va25omjq5nxdoc2355vq',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjtr7umsbrt3und36poa7c7qvt5pjt6udszoa2vzpzlb4d6d35rocxsuieikn5yd4rgg6nzm',
-  'https://www.imdb.com/title/tt0114369/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjqr7r4uab63ekdd4pnb7d7sudgoq366sstoa2v3njndb4k4l7gvmqrspi6xzgt2x3hfjt5tty'
+  'https://www.imdb.com/title/tt0050083/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnrwqptmubby3qktv7pjb3bpuu35pjt6udk3oyyvznrpb4d2k47to67emtt7zat6gujwt4lt4',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzvr7umoazy3mmtz7hmapb7evd5pjt6ud23ou3fznjpb4dyxac2537ixz4wzo6r4gj4vsya2',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbxr7tm2azs3yptd6xkatbpswt5pjt6udc7om2v5mrcb4d7hvqjkgzqj6rrxn6qwjrvt5zks',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbsrtsmwbz73qodb6hoa3epwu35pjt6uck6pa4vvpzkb4dzg5ziqdnk4njobl7733pkjeepm',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbqrxu4yajt2iod54plape7stttfjrkqcssoyzf5mryoczqbvzsw5lpcw3k4rbiwh2huwpa',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbrrhqmqab33amt36pmb7a72wt5pjt6uc2tpezvtnbcb4ds5wvyi574eiic77q4pvzvvkmu2',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjzrtt4qab23apdb4pjb7epgvt5pjt6uckyouyvvnbmb4dvboth36ldrfio36wocxnmlib3y',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjwrdt46bb62iptv6xpalbpuw3goq366ss4oyyfznzpd54k5a3gilopdaphws7fqfk5nc4zt7y',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjuqltm4ab23iktx67iate72utgoq366sszoqzflpzldn4k4qqapbd6t6htzgqceka53rxtsgi',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjvrxt4ycj33ipdz4heaxd74vdgoq366sstom4vlmjkcr4k4klukctkuq6o65p52dieu2bz7ry',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjvrxt4ycj33ipdz4heaxd74vdgoq366sstom4vlmjkcr4k4klukctkuq6o65p52dieu2bz7ry'
 )
 
 result_reviews <- scrape_reviews(urls)
