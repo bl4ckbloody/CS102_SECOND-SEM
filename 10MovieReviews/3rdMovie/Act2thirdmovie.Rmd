@@ -41,7 +41,7 @@ scrape_reviews <- function(urls) {
   all_reviews
 }
 
-# this is the url for twelve pages 
+# this is the url for pages
 urls <- c(
   'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt',
   'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnrtqprm2cj334ptb6xeadd74w35pjt6ubc6pe3fvmzdb4d5yitxog6cpty22ex4i4jl3nks6',
