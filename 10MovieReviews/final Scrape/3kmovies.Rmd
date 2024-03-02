@@ -1,0 +1,249 @@
+---
+title: "3kmovies"
+author: "Paula Mae Salvador"
+---
+
+
+```{r}
+library(rvest)
+
+scrape_page <- function(url, title) {
+  page <- read_html(url)
+
+ Usernames <- page %>% html_nodes('span.display-name-link') %>% html_text()
+  ReviewerDates <- page %>% html_nodes('span.review-date') %>% html_text()
+  ReviewerContents <- page %>% html_nodes('div.text.show-more__control') %>% html_text()
+  Ratings <- page %>% html_nodes('span.rating-other-user-rating') %>% html_text()
+
+  max_length <- max(length(Usernames), length(ReviewerDates), length(ReviewerContents), length(Ratings))
+
+  data.frame(
+    Title = rep(title, max_length),
+    Usernames = rep_len(Usernames, max_length),
+    Reviewer_Date = rep_len(ReviewerDates, max_length),
+    Reviewer_Content = rep_len(ReviewerContents, max_length),
+    Rating = rep_len(Ratings, max_length)
+  )
+}
+
+#url of the 10 movies^^
+urls_movie1 <- c(
+  'https://www.imdb.com/title/tt6166392/reviews/?ref_=tt_ql_2',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnrtrls4obbt3mndb4hia7epsv35pjt6ubc7pezf5njcb4drjclbn2zssqfglmrkam7flw5ms',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbyrdrmyar52mktv6pkalep4ul5pjt6ubc7pa3frnzob4dr6syscdviaqepjliymsojlgvti',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjzqpum2bb23antx6pma7ap4ulgoq366sssouyvxnbddz4k5xb25bodb6kgk2a6eg2ncqm7k3q',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjzqpum2bb23antx6pma7ap4ulgoq366sssouyvxnbddz4k5xb25bodb6kgk2a6eg2ncqm7k3q',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrzr7smwabt2mot777oadb7ew35pjt6ubc6oi4vvprcb4dz24gjgkrq6dzctzrp4xy4de6we',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrxrdq4yary34otx6xfa7dpsvdfoq366sssou2vtmbjcr4k5t2jep5sq3c55mfa6fq23o7ai5q',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrsrdumobb73modt7poaha7sutfoq366sssou4v3prldf4k5gw5esw7gqwbbhnry4op76ewkli',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmzyrdrmscb73iot57xiada76wtfoq366sssou3vtprodf4k5wsagfec7vr5knzu5vwhjf2zyhy',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmzyrdrmscb73iot57xiada76wtfoq366sssou3vtprodf4k5wsagfec7vr5knzu5vwhjf2zyhy',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmzwrlum4aj53eptv67eahep4vl5pjt6ubc6omyf5prjb4d2ptdp634hn62kihsimul5gadxm',
+  'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmzurdr46bby3ykt767kahc7wulgoq366sssoq4vxprod54k46y4kvb2oykf75ngmacpk3lywbi'
+)
+title_mov1 <- "Wonka"  
+
+
+urls_movie2 <- c(
+  'https://www.imdb.com/title/tt2356777/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnrxr3umucbt2imt36xla3b7evd5pjt6ubc5oa2f5mjdb4d7j2ifaiz3xwqfydn6u6qwqljrc',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzyrdtmqazs3ant74platd72wt5pjt6ubc5oa3f7mrpb4d4wwld3qjtw336i4nr5nymy6lfi',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzvr7rmsbz63qot76pfb7c7yvt5pjt6ubc6payfzprpb4dvwrl4z2q6vmypwxltomskeo6pi',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzqrls4ubzt3emtz7ppadepwvd5pjt6ubc6o4zvlmzmb4dwcistfhau3tty3wwpfc6uoc6gc',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbxqpsmsbbs3emdx7pia7bpyvt5pjt6uck5peyvrnrcb4drbxoww5bdmbkabjtisqbixhifi',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbvr7s4wazt3mott7hla7b7gvl5pjt6ud2soqyf7pzdb4d3kwhiptdjv4hlxiuudpocxjus2',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbtrxt4ybb32mmt34piadcpuvt5pjt6ubc6pa3f5prob4dq5a4l3hygl43rksyqzaytsczkk',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbqrptm6bj62imd77xmadapgu35pjt6uck5pa4ftmrdb4d45yemusie2issbhq6z45mjpfla',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjyr3s44cj53antd7xjb3a7gul5pjt6ubc5oiyfrpzmb4d4cmez5zhpaotlgr272b47opfcw',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjzrlu44cjt2iodr6plaxcpqu3coq366ssyoq2vlnbndn4k4cijwwa6anq6q7q3ehues7vu7ja',
+  'https://www.imdb.com/title/tt2356777/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjxrxq4scj53ipt767ib7e7gvl5pjt6ucctoy2vtmbjb4d7porvgukklxvn2dvypjnylikqo'
+)
+title_mov2 <- "True Detective" 
+
+urls_movie3 <- c(
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnrtqprm2cj334ptb6xeadd74w35pjt6ubc6pe3fvmzdb4d5yitxog6cpty22ex4i4jl3nks6',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzsr7s4sary3qnd36hpapdp4tttfjrkic22oi2f7mryocj3d4ekjilyaeamq3cblvxqj3ha',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbxqptmsbbz2mkd56xpb7cpywt5pjt6ubc6pe4f3pzkb4d3jplaom7jqpnwjtiqjsjj42tyu',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbqqlu4oab53qkdz6pjapdpewt5pjt6ubc5oazfzpzjb4dsqmexksk64bvghmfpja2tcj3py',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjwr3tmmar32ipdr7hiahe72v35pjt6ubc5oa4v7pzmb4d6uedga5ldljcdok2ztddhm6vm4',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjqr7umubzy3umtz7pfb3dpqv3hoq366sssoyyvznrddz4k5h3zjbmcrndrkfclibb4psryvya',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrzrds4sbrz3ikdr7xja7bp6u3eoq366sssoyyv7mrldb4k4dnevhk7yzufffopq67elbzneki',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrurhtm2art3ypt77xeb3epyul5pjt6ubc5oazftmzdb4d4jnfn7oogasetvr5bfmuh2hiqw',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrtrxqmobzz34kdb7xlaxc7yu35pjt6ubc5oa3fxnrdb4d2lvhmjczehvv3qbgqufmw4fjec',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmzyqltmqaj43imdx4hjadap4ul5pjt6ubc5oezf5mrib4d3gl753rrydghjcynydfuxjh6li',
+  'https://www.imdb.com/title/tt15009428/reviews/?ref_=tt_ov_rt_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmzwrdrmmazz34kd54pob7bpwvtgoq366sssoyyvznrncv4k5wmfjiaz2mpoaqnjbp4l6opfrvy'
+)
+title_mov3 <- "Argylle"
+
+urls_movie4 <- c(
+  'https://www.imdb.com/title/tt11847842/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnztrpq44aby3qpd56xpb3c7wtttfjrkucszoqyfxnjyoa3pwjedaalalouvqx3kwtqnaeua',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbtrhqmobb634ktz7hkahc7evl5pjt6ucs4oi2fxmrdb4duvalasliw46pkwod33bxabml6q',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjxr3q4mab43uptx77ja7c76vl5pjt6ubk3om4f7njkb4dtgvsl5auo36bxrsxl6loydik3u',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjqrhumobr52mpdv4pnaxcp4vthoq366ss4o4zvzmrcdz4k5msew5eiv5yuou75dwxvecuqcqa',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrxrxum6bry2mmdr4pea7b76w3eoq366sssoyzv3mjodn4k44ks6o2mohzxxmn3sz26rax47sa',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrvrlum6brz3qntx4ppadbp2udcoq366ss4o43vjpzodf4k4455uje23w7qpitttwbks7etq2y',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrqrhqm4br23qkt37hoapcpewt5pjt6ubk2oq3v3nbdb4d7ng4osspp5swqe6okslnk5izg6',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmzzrpu4ybz33eodt6pladepuvdhoq366ss4payvrnbpdv4k5uric7zuv36ffkmqrazzg5yb46a',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmzurxqmobj43qntb77eb7e7qudeoq366ss4o42f3mbldj4k4262zxvwpeva35i25vtk4y6baxi',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmztrdsmubr23ektb6hfa3b7yvthoq366ss4payv3mbidn4k4w6uvgnzz5oxkvgfsj25ei6u33y',
+  'https://www.imdb.com/title/tt11847842/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmbzr7sm2ar23undt4hmatd7wu35pjt6ubc6ou2vzprnb4dzl5feqpxegatbz4fnnql2y4pri'
+)
+title_mov4 <- "The Tourist"
+
+urls_movie5 <- c(
+  'https://www.imdb.com/title/tt0073486/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnztrhumubj53qodx6hna7c72ul5pjt6ud24oe4fjnjnb4dzk3zwpy3k5bredbt5rqa7ofnpk',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjzrdumwbr43andd4hfaxc7ww3foq366ssyomzfjmbkcr4k4f5o3wn4dtzla6jhbyd6iuguxxq',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjsqptmqab234ktt6xla3b7su3goq366sszoezv3mjpdj4k5elfov5usc3op2ddv24czsovd7q',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjqrxq4ubr23qpt54ppalcp6vd5pjt6uc2zoe4fxnrib4d6r6ja5un44fcms2amjvmvrsdks',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjrrtr4ocby3yndz6hia3d7qvl5pjt6uck3pe3fzmbcb4d2if7irea2c4n4kdketmawqeioo',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmryrhs4ubbt3uodd6hkaldpwwtcoq366ss7pazvjnjndr4k4v3vhiqkcq24mxfclexpmu2fgsi',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrwqpr4maby2iodb7peb7bp6u3hoq366ss7omyf7mjmcv4k5xdsy4uxak6op2mj4xqp6ohbmva',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrxrhsmsaj53qpdd67kahc72tttfjrk6d25pa4vznzyocoscebvucioyjqrqai6urgeo53q',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrurpqm6ajt2mmtv6xkaxap2wt5pjt6ud26payfvprlb4d6x7mgp75lo5dvpdrbdlm6652pq',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrsqlq4wbry2mkt76xeahb7yw3hoq366ss6o4yfrprddz4k5sw7ofkwnjjpzb4pwbslsnpxnqi',
+  'https://www.imdb.com/title/tt0073486/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrsrlummcbz3iktx6hoald7wvlhoq366sszouzf3njkd54k5yunv4qc5bo4rnqqocspej5ynky'
+)
+title_mov5 <- "One Flew Over the Cuckoo's Nest"
+
+urls_movie6 <- c(
+  'https://www.imdb.com/title/tt0038650/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzurxtmybb63mntv7xlapcp4wt5pjt6ucs4oq3f5njmb4dyqhdovaw6z4rgxq3knfihnc5vg',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbxrdr4mbj33ent37hiahapqud5pjt6ucs5ou2fxmjlb4dx232aprnxplo6mxcy5ncozx5sw',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbtrdrmmbrs2imt34heala7ewt5pjt6udsyoeyvrnzib4d3lzrx4spumbxj7faenjnbrkais',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjzqltmsbz73qmtr6xjalcpsvlcoq366ss7ouzvznbcdf4k46j4zznc5phsf42ldbipp7duyaq',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjur3smoar53ipt367fb3a76vlfoq366sstoizvrmrcdj4k5hm33ypinh2yrdyfmrhp3d4ycvy',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjvrpu44bj63aktd6hjada7wv35pjt6ud25ouyfrprnb4d5cnk5flfxzc23xtudjpm6zyzkc',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjsrlsmobj33eptd67na7epqvl5pjt6uck3oy4vzprmb4dsah3q623mzxevupb2ib7ezpafk',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjqrdrm6ary3ekd36hiaxdpyudgoq366sstoeyftmzpdj4k46vk5lmorpstrglgcvlj66eq42q',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjrrlt4mbj63epd767ob7d7gtttfjrk2dkyoq2vrpryodzvnthnlb4pcmfuujop2lvlmwfq',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrzqpsm6aj73qkdt7hlb3e7wwt5pjt6ud25oy4fxpzkb4d2elp7zzaknyioaj7ots2nntmca',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrwr3rmocby3qptz6pfa7apwv3eoq366ss4ou3v3njidf4k4qtubgmapkigoe7vtqivmue4ply'
+)
+title_mov6 <- "It's a Wpmderful Life"
+
+urls_movie7 <- c(
+  'https://www.imdb.com/title/tt0038650/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzurxtmybb63mntv7xlapcp4wt5pjt6ucs4oq3f5njmb4dyqhdovaw6z4rgxq3knfihnc5vg',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbxrdr4mbj33ent37hiahapqud5pjt6ucs5ou2fxmjlb4dx232aprnxplo6mxcy5ncozx5sw',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbtrdrmmbrs2imt34heala7ewt5pjt6udsyoeyvrnzib4d3lzrx4spumbxj7faenjnbrkais',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjzqltmsbz73qmtr6xjalcpsvlcoq366ss7ouzvznbcdf4k46j4zznc5phsf42ldbipp7duyaq',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjur3smoar53ipt367fb3a76vlfoq366sstoizvrmrcdj4k5hm33ypinh2yrdyfmrhp3d4ycvy',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjvrpu44bj63aktd6hjada7wv35pjt6ud25ouyfrprnb4d5cnk5flfxzc23xtudjpm6zyzkc',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjsrlsmobj33eptd67na7epqvl5pjt6uck3oy4vzprmb4dsah3q623mzxevupb2ib7ezpafk',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjqrdrm6ary3ekd36hiaxdpyudgoq366sstoeyftmzpdj4k46vk5lmorpstrglgcvlj66eq42q',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjrrlt4mbj63epd767ob7d7gtttfjrk2dkyoq2vrpryodzvnthnlb4pcmfuujop2lvlmwfq',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrzqpsm6aj73qkdt7hlb3e7wwt5pjt6ud25oy4fxpzkb4d2elp7zzaknyioaj7ots2nntmca',
+  'https://www.imdb.com/title/tt0038650/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrwr3rmocby3qptz6pfa7apwv3eoq366ss4ou3v3njidf4k4qtubgmapkigoe7vtqivmue4ply'
+)
+title_mov7 <- "Se7en"
+
+urls_movie8 <- c(
+  'https://www.imdb.com/title/tt0050083/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnrwqptmubby3qktv7pjb3bpuu35pjt6udk3oyyvznrpb4d2k47to67emtt7zat6gujwt4lt4',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzvr7umoazy3mmtz7hmapb7evd5pjt6ud23ou3fznjpb4dyxac2537ixz4wzo6r4gj4vsya2',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbxr7tm2azs3yptd6xkatbpswt5pjt6udc7om2v5mrcb4d7hvqjkgzqj6rrxn6qwjrvt5zks',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbsrtsmwbz73qodb6hoa3epwu35pjt6uck6pa4vvpzkb4dzg5ziqdnk4njobl7733pkjeepm',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbqrxu4yajt2iod54plape7stttfjrkqcssoyzf5mryoczqbvzsw5lpcw3k4rbiwh2huwpa',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbrrhqmqab33amt36pmb7a72wt5pjt6uc2tpezvtnbcb4ds5wvyi574eiic77q4pvzvvkmu2',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjzrtt4qab23apdb4pjb7epgvt5pjt6uckyouyvvnbmb4dvboth36ldrfio36wocxnmlib3y',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjwrdt46bb62iptv6xpalbpuw3goq366ss4oyyfznzpd54k5a3gilopdaphws7fqfk5nc4zt7y',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjuqltm4ab23iktx67iate72utgoq366sszoqzflpzldn4k4qqapbd6t6htzgqceka53rxtsgi',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjvrxt4ycj33ipdz4heaxd74vdgoq366sstom4vlmjkcr4k4klukctkuq6o65p52dieu2bz7ry',
+  'https://www.imdb.com/title/tt0050083/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjvrxt4ycj33ipdz4heaxd74vdgoq366sstom4vlmjkcr4k4klukctkuq6o65p52dieu2bz7ry'
+)
+title_mov8 <- "12 Angry Men"
+
+urls_movie9 <- c(
+  'https://www.imdb.com/title/tt0110357/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbyrxrmqcj23mptv7pkatcpevt5pjt6udkyoqzvtnbkb4dvyjvvtwuqqyubgfiueekv27srm',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbsrtu4qaj33iot377mb7b7uvt5pjt6ud2youzfvnjnb4d5ki7gejyk5pqwx6phky2tvukwy',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjyqltmwbj43endz6xna3b7wwthoq366ss7pe4fzmbkcr4k4nt53nggeo4uavne74v7muncfqq',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjxrpumoaj53aodb67ob3d7yvl5pjt6ud23om4f3nbpb4d53z3uzchllrcbwfytsp34juctk',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjvrxqmsajt3yodr7xpb3epgvd5pjt6uds4o4zvxnbpb4d6v4zcef4fvjfoyjm42znvynxpc',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjtr3tmoazz3qptx6hia3bpeul5pjt6uckspa4fvmbpb4dshw7rlwtvuoaryz6upkljcg6n2',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjqrlrmwcby3mktz7xoahcpyvlgoq366ss4om4vtmzidn4k5plrmmx6kvobwb6cthattoysk7y',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmryrpsmocb72iotr7peb7dp2vt5pjt6ucc7oa2vjpzkb4dwkymd5r4qmgyybyngrzjjl2r6c',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrwrht4ocbz3qndb67kaxb7gvt5pjt6udc4om2vrmzcb4d43m6re44ms5pwdi2i7g53amsjq',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrxrlt44cjs3ekdx6xja3bp6ul5pjt6uc23oiyfjmjmb4dsqoocsbkzvktjadhnirwwtetug',
+  'https://www.imdb.com/title/tt0110357/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrvqlrmycby3ikt57hoaxd74ud5pjt6ucc4oayv3mrcb4d234p4w4jozcgqf3gg7gxcqdfhe'
+)
+title_mov9 <- "The Lion King"
+
+urls_movie10 <- c(
+  'https://www.imdb.com/title/tt0059742/reviews/?ref_=tt_ov_rt',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnzxrpu46ar33yntr7hjadbpgul5pjt6udc2oq4v3mjnb4dtqo67dyws3mmdvkjzhjyxvgyzg',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnburhq4sab43ymtb77jb3bp4wt5pjt6udsto42f3mzib4dwbne3oqyj5mpxcpwhriawgxpbs',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnbrr7tmsar43iotd7pob3b7yul5pjt6udk3peyf3nbob4d4rcwhrj2jxklc6ju4gmussayla',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjxrxq4scb63ikdd6hmade7quleoq366sszoezvlmbccr4k4u6k5tyditdxxixndl4wlo5nuuy',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjsrhu4war23ikdr4peapdpevd5pjt6uds3oa4v5mjnb4drdcmdrzaduhokp6zmpklg6lvvu',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnjqrdqmybrs2mmdz6heahbpgtttfjrkqc2toezv3mbyodksbzelz2awbigdyb25hbepjlga',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrzrdt4ocj33undt4hlapcpgudeoq366ss2ou2fxmrkcr4k5iy3ix2mnm2ojw4ganafcrcbgyq',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrxrdsmmcj33akdr4ppatepeutcoq366sstoa4flnrkdn4k5qwptgsloibqnt3ytpytxxch2ca',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrvrdr4ybj33ypdx4hladc7evt5pjt6udczoe4vtnzjb4dwbepyhg6tlq4u6ori4t6um6gmg',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrtrht4ucb53endd7xfb3b7wv3foq366ss3oa4fznrodf4k4txvggcrwzchi5sfhrxx4lp6dha',
+  'https://www.imdb.com/title/tt0059742/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjmrrrts4obz53aott77ma7bpewtgoq366ss3oa4fznrmdv4k466vowpei3uklca2yw6jpmwpzpa'
+)
+title_mov10 <- "The Sound of Music"
+
+moviereviews <- data.frame()
+
+
+for (url in urls_movie1) {
+  reviews <- scrape_page(url, title_mov1)
+  moviereviews  <- rbind(moviereviews , reviews)
+}
+
+
+for (url in urls_movie2) {
+  reviews <- scrape_page(url, title_mov2)
+  moviereviews <- rbind(moviereviews, reviews)
+}
+
+for (url in urls_movie3) {
+  reviews <- scrape_page(url, title_mov3)
+  moviereviews <- rbind(moviereviews, reviews)
+}
+
+for (url in urls_movie4) {
+  reviews <- scrape_page(url, title_mov4)
+  moviereviews <- rbind(moviereviews, reviews)
+}
+
+for (url in urls_movie5) {
+  reviews <- scrape_page(url, title_mov5)
+  moviereviews <- rbind(moviereviews, reviews)
+}
+
+for (url in urls_movie6) {
+  reviews <- scrape_page(url, title_mov6)
+  moviereviews <- rbind(moviereviews, reviews)
+}
+
+for (url in urls_movie7){
+  reviews <- scrape_page(url, title_mov7)
+  moviereviews <- rbind(moviereviews, reviews)
+}
+
+for (url in urls_movie8){
+  reviews <- scrape_page(url, title_mov8)
+  moviereviews <- rbind(moviereviews, reviews)
+}
+
+for (url in urls_movie9){
+  reviews <- scrape_page(url, title_mov9)
+  moviereviews <- rbind(moviereviews, reviews)
+}
+
+for (url in urls_movie10){
+  reviews <- scrape_page(url, title_mov10)
+  moviereviews <- rbind(moviereviews, reviews)
+}
+
+moviereviews 
+
+
+write.csv(moviereviews, file = "imdb_bind3kmovies.csv", row.names = FALSE)
+```
