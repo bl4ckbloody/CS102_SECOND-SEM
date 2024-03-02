@@ -26,7 +26,7 @@ scrape_page <- function(url, title) {
   )
 }
 
-#url of the 10 movies^^
+#url of the 10 movies^^ ggg
 urls_movie1 <- c(
   'https://www.imdb.com/title/tt6166392/reviews/?ref_=tt_ql_2',
   'https://www.imdb.com/title/tt6166392/reviews/_ajax?&paginationKey=g4w6ddbmqyzdo6ic4oxwjnrtrls4obbt3mndb4hia7epsv35pjt6ubc7pezf5njcb4drjclbn2zssqfglmrkam7flw5ms',
