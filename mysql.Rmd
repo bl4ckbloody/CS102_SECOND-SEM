@@ -1,0 +1,185 @@
+---
+title: "10MoviesDatabase"
+author: "Paula Mae Salvador"
+output: pdf_document
+---
+
+```{r}
+library(dplyr)
+library(dbplyr)
+library(RMariaDB)
+library(DBI)
+
+connection <- dbConnect(RMariaDB::MariaDB(), 
+                        dsn="mysql",
+                        Server = "localhost",
+                        dbname = "samplecs102", 
+                        user = "root", 
+                        password = '')
+dbListTables(connection)
+dbListTables(connection,"movies")
+
+#first movie review
+query <- "INSERT INTO movies (title, reviewer, date_of_review, rating, title_of_review, review)
+          VALUES ('Wonka', 'imseeg', '2023-12-09', '6/10', 'It looks the part, the actors are terrific, but the actual story and the songs fail to really excite me.', 'Memories of Gene Wilders Willy Wonka performance come to mind and whereas his 1971 version was magical and witty, this 2023 version of Wonka is a bit underwhelming to be honest...
+
+          The bad: the songs just dont excite me. They just dont. They are not terrible, but quite average. The songs in the 1971 version of Willy Wonka were superb. I can still remember them to this very day!
+
+          More bad: there is a lack of magic and surprise. The story just doesnt take me on a trip like the original did. Sorry, that I keep comparing this one to the original. Perhaps I shouldnt?
+
+          Not any good then? This movie will surely please the young kids who of course are the target audience for this movie. Its a nice fantasy musical movie for sure, with a bunch of TERRIFIC English actors, who lift this movie up. Timothee Chalamet did an allright job as well.
+
+          Nothing to really dislike about it, but nothing to get really excited about it either unfortunately, for me as a grownup fan of the original Willy Wonka with Gene Wilder.')"
+
+query_result <- dbSendQuery(connection, query)
+movies_data <- dbGetQuery(connection, "SELECT * FROM samplecs102.movies")
+glimpse(movies_data)
+
+#second movie review
+query <- "INSERT INTO MOVIES(title, reviewer, date_of_review, rating, title_of_review, review)VALUES('True Detective', 'Matthew McCnaughney OWNS this gem!', '2015-02-23', '10/10', 'A_Different_Drummer', 'If you want to skip this review just jump to the IMDb list of awards and nominations, and you''re done.
+
+If you want the skinny, let me say this is one of the most perfect dramas ever to grace your flat screen.
+
+Harrelson, you need to understand, is no slouch. He does crazy better than crazy people. And he usually steals any scene not nailed down.
+
+But Matthew McConaughey operates at such a level here -- not to mention the astonishing makeup which makes him appear to be playing his own father -- that he walks off with this production. Mesmerizing.
+
+Everyone is pitch perfect, which I believe explains the casting awards. Even Michelle Monaghan, usually known for getting by on her amazing looks, does more acting her than anytime in her career')"
+
+query_result <- dbSendQuery(connection, query)
+movies_data <- dbGetQuery(connection, "SELECT * FROM samplecs102.movies")
+glimpse(movies_data)
+
+#third movie review
+query <- "INSERT INTO movies (title, reviewer, date_of_review, rating, title_of_review, review)VALUES('Argylle', 'malmevik77', '2024-02-02', '7/10', 'Not plausible, but a laugh out loud silly spy movie', 'Argylle
+
+A very hyped movie from the writer of the Kingsman series, the trailer frequently showed moments of silliness, spy action, Bryce Dallas Howard screaming and a cat that''s supposedly awesome or something. At first the movie is cheesy as can be, but it does appear that is intentional. Most of the movie leads the audience to believe it is one thing, when it really is another, being revealed in surprise twists that aren''t very surprising.
+
+The ensemble cast does feature some great performances, even though Henry Cavill''s hair is absolutely terrible. Dua Lipa''s appearance is short, but she does a great job that it made me miss seeing her. Sam Rockwell continues a trend in Hollywood where age can be defied as I forgot he is in his mid 50s following the likes of Tom Cruise and Jason Statham.
+
+The movie is way too long and needed a better editor. I like a fleshed out story as much as the next person, but calm down movie.
+
+Now, on to the fun. This movie makes the word ridiculous woefully inadequate. But it''s a fun ridiculous. There are so many laugh out loud moments that it makes up for a lot of the flaws. I don''t want to spoil the movie, but keep an eye out for the blink and you''ll miss it hilarity.
+
+There are themes explored in this film about motivation, and whether the emotions experienced during life''s choices, even when told in the format of a spy thriller, would carry over if you got to do it all over again. Personally, I find that theory worth exploring, because I wonder if I''d make the same good or bad decisions if not exposed to certain stimuli or experiences. Nature vs nurture anyone? People admit that they would love to be able to speak to their younger selves to assure them that things would be better eventually, or to avoid pitfalls, but that''s not good enough. One never knows if that would make any difference, unless you take away those moments.
+
+I enjoyed the heck out of this movie overall, and recommend it for the silliness alone. Don''t take the movie seriously, and I believe you will too. The entire, very long, ending sequence is just crazy with the suspension of disbelief, but embrace it.')"
+
+query_result <- dbSendQuery(connection, query)
+movies_data <- dbGetQuery(connection, "SELECT * FROM samplecs102.movies")
+glimpse(movies_data)
+
+#4th movie review
+query <- "INSERT INTO movies (title, reviewer, date_of_review, rating, title_of_review, review)VALUES('The Tourist', 'julieshotmail', '2022-03-08', '8/10', 'Fargo-esque with two very likeable leads', 'The Tourist has a very Fargo feel to it, set in the vast open fields of Australia which makes it the more fascinating. Starting out with action and a mystery, this short series has enough eclectic elements to keep you captivated. First, there is a mysterious guy, followed by a very sympathetic cop, delightfully played by Danielle Macdonald. This actress is the biggest revelation here. Danielle portrays the character with so much heart that every scene with her character Helen just shines. More quirky characters are introduced, notably the American cowboy played by an Icelandic actor, the detective, and the cop trainee. The plot does get convoluted but loose ends are still tightened up so you don''t lose your grip. The cinematography, camera work, and editing do justice to the sweeping Australian Outback beauty. Best of all, there is some snide dark humor that''s quite enjoyable from characters that you least expect to be funny in real life.')"
+
+query_result <- dbSendQuery(connection, query)
+movies_data <- dbGetQuery(connection, "SELECT * FROM samplecs102.movies")
+glimpse(movies_data)
+
+#5thmoviereview
+query <- "INSERT INTO movies (title, reviewer, date_of_review, rating, title_of_review, review)VALUES('One Flew Over the Cuckoo''s Nest', 'Wuhackk', '2012-10-21', '9/10', 'The spirit of freedom vs. the spirit og legal-ism', 'Set in the early 60s, the story involves R.P. McMurphy (Jack Nicholson) and his arrival at a mental institution in Salem, Oregon (where the film was shot). He plays the ''mental illness'' card to get out of prison time, thinking it''ll be a piece of cake, but he''s wrong, very wrong. Everything appears well at the hospital and Nurse Ratched (Louise Fletcher) seems to be a benevolent overseer of McMurphy''s ward, but there are sinister things going on beneath the surface.
+
+''One Flew Over the Cuckoo''s Nest'' (1975) is a film you''ll appreciate more as you mature. I saw it when I was younger and, while I thought it was good, I didn''t ''get'' a lot of the insights the film conveys.
+
+The movie criticizes the way institutions deal with mental illnesses. Their ''therapy'' is futile and only makes the patients dependent on the institution itself, thereby creating its need for existence (often at the taxpayer''s expense). McMurphy is a threat to the establishment and therefore must be ''dealt with.''
+
+A lot of people criticize the film by suggesting that Nurse Ratched isn''t that bad'' or that ''she was only trying to do her job'', etc. I had the same reaction the first couple of times I saw it. This reveals an aspect of the film''s brilliance: Ratched''s malevolence is so subtle that the filmmakers allow the possibility for complete misinterpretation. Yes, from an administrative point of view, she seemingly does a good job, she''s authoritarian without being sadistic, and she cares for the residents as long as they follow the rules (more on this below). Yet she is demonic as a robotized arm of a dehumanizing system. She maintains the residents in a state of oblivion and marginalization; they are deprived of their dignity because the system sees them as subhuman.
+
+The filmmakers and Fletcher (not to mention the author of the book, Ken Kesey) make Nurse Ratched a more effective antagonist by showing restraint. Compare her to, say, Faye Dunaway''s portrayal of Joan Crawford in ''Mommie Dearest,'' which pretty much turned her into a cartoon villain. Ratched isn''t such an obvious sadist, yet she uses the rules to tyrannize the men and reduce them to an almost infantile state of dependency and subservience. Her crowning achievement is Billy Bibbit (Brad Dourif).
+
+McMurphy, despite his obvious flaws, is the protagonist of the story. Although he''s impulsive and has a weakness for the female gender, which got him into prison in the first place, he has a spirit of freedom and life. His problem is that he needs to learn a bit of wisdom; then he can walk in his freedom without causing unnecessary harm to himself and others.
+
+Nurse Ratched, on the other hand, represents legal-ism, which is an authoritarian spirit obsessed with laws or rules. This is clearly seen in the World Series sequence: Even though McMurphy gets the final vote he needs for his ward to watch the Series Ratched refuses to allow it on a technicality. When McMurphy then PRETENDS to watch the game and works the guys up into a state of euphoria, Ratched reacts with sourpuss disapproval. That''s because legalism is the opposite of the spirit of freedom, life and joy. Legalism is all about putting on appearances and enforcing the LETTER of the law (rule). The problem with this is that ''appearances'' are not about inward reality and, worse, the letter kills.
+
+Despite his folly and mistakes, McMurphy does more good for the guys in his ward than Ratched and the institution could do in a lifetime. How so? Not only because he has a spirit of freedom and life, but because he loves deeply, but only those who deserve it - the humble - not arrogant abusers. When you cast restraint to the wind and love with all your heart you''ll reap love in return, as long as the person is worthy. A certain person hugs McMurphy at the end because he loves him. McMurphy set him free from the shackles of mental illness and, worse, the institution that refuses to actually heal because it needs mentally ill people to exist; it only goes through the motions of caring and healing (not that there aren''t any good people in such institutions, of course).
+
+No review of this film is complete without mentioning the notable character of ''Chief'' Bromden, played effectively by Will Sampson.
+
+The film runs 2 hours and 13 minutes.
+
+GRADE: A')"
+
+query_result <- dbSendQuery(connection, query)
+movies_data <- dbGetQuery(connection, "SELECT * FROM samplecs102.movies")
+glimpse(movies_data)
+
+#6thmovie
+query <- "INSERT INTO movies (title, reviewer, date_of_review, rating, title_of_review, review)VALUES('It''s a Wonderful Life', 'bkoganbing', '2005-12-25', '10/10', 'To My Big Brother George, The Richest Man in Town', 'I''ve always thought that the reason It''s A Wonderful Life has had such enduring popularity is that more than in any other film it shows what can be the value of a single individual and the contribution to the greater good they can make.
+
+George Bailey as portrayed by James Stewart is the kind of every man hero we can all identify with. He''s got the every day problems to be sure, raising and providing for a family, but he''s got bigger problems than that. Fate has made him the rallying point of opposition in his small town of Bedford Falls to the richest and meanest man in town, embodied in Lionel Barrymore.
+
+It''s a real David vs. Goliath battle. Barrymore seems to have unlimited resources at his disposal. Samuel S. Hinds as Peter Bailey put it so well to him in asking what are you doing all this for? Barrymore does have more money than he could ever possibly use. A little charity wouldn''t hurt him.
+
+Remember the basic plot outline. A whole lot of people in Bedford Falls one post World War II Christmas Eve see that their friend George is toting a heavy load of mysterious origins. Their prayers reach the heavens where an angel is dispatched to aid.
+
+But before Henry Travers the angel arrives, he''s given the story of George Bailey''s life. And we see the kind of struggles he''s had, the sacrifices he''s made for the good of a whole lot of others. We''ve also seen a greedy and grasping Potter, grabbing everything that George Bailey cannot save.
+
+Something happens that day before Christmas through no fault of his own, Bailey is in big trouble. It''s driven him to the brink of despair. That''s why the angel is sent down. He shows him the alternate universe that wouldd have been had he never existed. It''s something each and every one of us should try to do, step outside ourselves see just what our contributions can be.
+
+But I think what Frank Capra is trying to say in this greatest of his films is that having done that and we realize we haven''t contributed to the greater good of humankind, we resolve to do so. It''s a simple, but profound lesson.
+
+What if Potter got the same opportunity? In a sense Charles Dickens did just that in A Christmas Carol. Would Lionel Barrymore change? It''s an interesting point of speculation.
+
+In addition to those cast members already mentioned a whole group of players who worked with Capra before grace this film. Add to that some others and you have a perfectly cast feature picture.
+
+Donna Reed has an interesting part as well. Your choice of mate is real important in life. Had she not been as loving and supportive to George Bailey, he might very well have taken a different route in life. Mary Hatch Bailey became a signature part for her, more identified than her role in From Here to Eternity which got her an Oscar. It certainly was the basis for her TV series.
+
+When Todd Karns who plays Harry Bailey toasts his brother he''s saying that the riches of the world are not necessarily things that can be quantified. Your life is not measured in material things, but in how you use the material things given you.
+
+And that universal lesson will be taught into eternity as long as It''s A Wonderful Life is shown every year. Wouldst we all learn it.')"
+ 
+query_result <- dbSendQuery(connection, query)
+movies_data <- dbGetQuery(connection, "SELECT * FROM samplecs102.movies")
+glimpse(movies_data)
+
+#7thmovie
+query <- "INSERT INTO movies (title, reviewer, date_of_review, rating, title_of_review, review)VALUES('It''s A Wonderful Life', 'TheLittleSongBird', '2010-03-28', '10/10', 'One of those quintessential Christmas movies....', 'It''s a Wonderful Life is something truly special, and along with Scrooge, the original Miracle on 34th Street and Home Alones 1 and 2, it is something I watch every Christmas. Why? Because I love this movie, seriously I do. Looking through my 1000 or so reviews here, I couldn''t believe I hadn''t reviewed this movie; I have seen movies that I have loved and cherished since childhood and I have seen movies that belong at the bottom of the garbage. It''s a Wonderful Life belongs to the former, although I am 17, I appreciate a good movie when I see one. This is more than a good movie, it''s a timeless masterpiece, that holds up on repeated viewings and never loses its magic.
+
+It''s a Wonderful Life could have easily been overly-sentimental and clichéd, but the quality of the direction and the screenplay that others have summed up perfectly assured it was a beautiful, heart-warming and somewhat poignant film. While there are some funny parts, not bursting-your-gut funny but funny in a subtle sort of way, other parts are close to heart-rending. The direction from Frank Capra is excellent, sensitive and nuanced, and Capra shows even more talent as a screenwriter having penned one of the most honest and touching scripts ever in a film. Casablanca, All About Eve and The Shawshank Redemption all had wonderful scripts, but the script here has a lot to say about community spirit and shows that this film is much more than feel-good sentimentality. There is the element of feel good here, no doubt about it, but it doesn''t overpower what the film intends.
+
+Visually, It''s a Wonderful Life is a wonder. I don''t think it is dated at all, the cinematography is crisp, the black and white looks beautiful and the pristine Christmas scenery really does take me back. Some of my favourite ever memories was of Christmas, whether it was watching nostalgic Christmas videos, eating Christmas dinner or singing carols under the Christmas tree. Another thing I have to mention is that the movie is richly and beautifully scored, Dmitri Tiomkin''s music here is absolutely gorgeous, lyrical, whimsical, nostalgic and most importantly it never felt intrusive in the more integral parts of the film. And I have to mention the story, never in my life(and I genuinely mean this) have I seen a movie where it communicates such a strong message and so well too. The story of a suicidal man who is shown the value of his life by his guardian angel is an effective, timeless one, imitated perhaps but never equalled.
+
+Finally the acting is wonderful. James Stewart, and I seriously don''t give a damn whether he was a racist or not and neither should you, is absolutely superb as George Bailey, a truly complex character who goes through such a lot to get to where he is at the end of the movie. George Bailey is like Mr Deeds, John Doe and Mr Smith rolled into one, and in my opinion only James Stewart could have given justice to a character that has self-doubt gnawed at his essential decency. Also the character change, like that of Alistair Sim''s Scrooge at the end of Scrooge, was heart-breakingly believable. Donna Reed is radiant and charming as his wife, who is like a caring lover, devoted wife and dedicated mother, while Thomas Mitchell gives one of his more memorable performances as Uncle Billy. Henry Travers is a revelation as Clarence the guardian angel, but there is another performance I think is worth of mention. For a good morality tale, you need a good villain. Well in the name of Potter, you have one. Who better to portray him than the great Lionel Barrymore acting at the peak of his powers?
+
+Overall, a timeless classic with a true and heart-rendingly poignant ending. 10/10, one of the easiest perfect scores I have made recently. Bethany Cox')"
+
+query_result <- dbSendQuery(connection, query)
+movies_data <- dbGetQuery(connection, "SELECT * FROM samplecs102.movies")
+glimpse(movies_data)
+
+#8thmovies
+query <- "INSERT INTO movies (title, reviewer, date_of_review, rating, title_of_review, review)VALUES('It''s A Wonderful Life', 'FlickJunkie-2', '2000-12-06', '10/10', 'A Wonderful Film and Timeless Classic', 'This film has become a Christmas tradition in my family. We watch it every year and never tire of it. Frank Capra is a master of creating films with a message that reinforce strong values. This is probably his greatest film in that regard. Both he and Stewart have publicly stated that this is their favorite film.
+
+The message in this film is one of courage and sacrifice for the greater good as George Bailey, a man with big ideas about seeing the world, continually forsakes his own desires to do what is right for the town. The second message is that each life important. No matter how insignificant we feel we are, we are all inextricably linked to each other and play an important part in the fabric of one another''s lives.
+
+Capra''s direction is brilliant. His genius is bringing human stories to life in a ways that not only make a point, but that totally involve the audience in the lives of the characters. He is always extremely optimistic about the human condition. He is known for testing his characters with overwhelming adversity to make them struggle to triumph in a way that causes the world to change and the character to grow. For this reason his films were always crowd pleasers and this film was the best of all in that regard.
+
+Led by Capra''s understanding hand, the actors all did a magnificent job. Stewart''s wide-eyed enthusiasm and boyish charm, coupled with an unbending strength of character made him the perfect folk hero. Donna Reed was lovely and charming and attained the right balance between being supportive and inspirational. The romantic chemistry between her and Stewart was subtle and charming. Lionel Barrymore was towering as the greedy old skinflint who was trying to take over the town. Thomas Mitchell plays one of my favorite characters, as the bumbling Uncle Billy in probably his most memorable role.
+
+This film is number eleven on AFI''s list of best films of the century. It was nominated for five academy awards and won none. It was swept in 1947 by ''The Best Years of Our Lives'', a great film that won seven Oscars that year but in my opinion was the lesser film. History has corrected that minor injustice by rendering ''It''s a Wonderful Life'' an enduring classic that is viewed and loved by generation after generation. Of course, I rated it a 10/10. I can''t wait to see it again this Christmas.')"
+
+query_result <- dbSendQuery(connection, query)
+movies_data <- dbGetQuery(connection, "SELECT * FROM samplecs102.movies")
+glimpse(movies_data)
+
+#9thmovie
+query <- "INSERT INTO movies (title, reviewer, date_of_review, rating, title_of_review, review)VALUES('It''s A Wonderful Life', 'PyrolyticCarbon', '2002-09-13', '10/10', 'A wonderful film that should be watched again and again.', 'This is one of the best films of all time, without a doubt. I challenge anyone to watch this film and not be touched, if you can, you have no heart!
+
+James Stewart is one of my favourite actors, and in this film he acts so naturally you even forget he''s an actor playing a part, you really believe his story. You''re pulled on a roller coaster of emotions throughout this film, and by no means is this a light hearted look at life, as many believe. This is not a rose tinted look at the wonderful life we have, this is a dark, downtrodden start to a film where the lead character is about to commit suicide.
+
+However, it is a beautiful film, and is one of the few that you can watch again and again and walk away with the same glowing feeling as you did when you first watched it.')"
+query_result <- dbSendQuery(connection, query)
+movies_data <- dbGetQuery(connection, "SELECT * FROM samplecs102.movies")
+glimpse(movies_data)
+
+#10movie
+query <- "INSERT INTO movies (title, reviewer, date_of_review, rating, title_of_review, review)VALUES('It''s A Wonderful Life', 'midnightclub', '2022-01-11', '9/10', 'More than a Christmas film', 'An absolute classic of ever there was one. A movie that, thankfully, transcends being a Christmas movie. If you removed the minuscule reference to Christmas you would still have the classic as it is today. A film about caring for your neighbour and your neighbour is everyone. A film about sacrifice for those you love and even your community at large. It won''t make you rich in money but it would make the world a better place. Never forget the YOU, like George Bailey, matter. You matter to more people than you know. It''s a Wonderful Life if you can see that.')"
+
+query_result <- dbSendQuery(connection, query)
+movies_data <- dbGetQuery(connection, "SELECT * FROM samplecs102.movies")
+glimpse(movies_data)
+movies_df <- data.frame(movies_data)
+write.csv(movies_df, file = "10MoviesDatabase.csv", row.names = FALSE)
+```
+
+
